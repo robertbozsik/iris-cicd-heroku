@@ -6,15 +6,12 @@ language: python
 sudo: true
 
 python:
-  #  - "3.8"
   - "3.6"
 
 services:
   - docker
 
 before_script:
-  # - pip install docker-compose
-  # - pip install coveralls
   # logging in to Docker
   - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
   # install Heroku Command Line Interface
@@ -24,16 +21,11 @@ before_script:
   - docker login --username=$HEROKU_USERNAME --password=$HEROKU_API_KEY registry.heroku.com
 
 script:
-  #   - docker-compose run app sh -c "pytest test.py"
   - docker build -t $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest .
   - docker tag $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest registry.heroku.com/$HEROKU_APP_NAME/web
 
-# after_succes:
-#   - coveralls
-
 deploy:
   provider: script
-  #   skip-cleanup: true
   script:
     # push to Docker Hub
     - docker push $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest
