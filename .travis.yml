@@ -1,0 +1,49 @@
+# Travis CI logs in to Docker and Heroku
+# builds the Docker image, pushes it to Docker Hub
+# deploys the image on Heroku
+
+language: python
+sudo: true
+
+python:
+  #  - "3.8"
+  - "3.6"
+
+services:
+  - docker
+
+before_script:
+  # - pip install docker-compose
+  # - pip install coveralls
+  # logging in to Docker
+  - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+  # install Heroku Command Line Interface
+  - curl https://cli-assets.heroku.com/install.sh | sh
+  # https://devcenter.heroku.com/articles/container-registry-and-runtime
+  # logging in to the Heroku registry:
+  - docker login --username=$HEROKU_USERNAME --password=$HEROKU_API_KEY registry.heroku.com
+
+script:
+  #   - docker-compose run app sh -c "pytest test.py"
+  - docker build -t $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest .
+  - docker tag $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest registry.heroku.com/$HEROKU_APP_NAME/web
+
+# after_succes:
+#   - coveralls
+
+deploy:
+  provider: script
+  #   skip-cleanup: true
+  script:
+    # push to Docker Hub
+    - docker push $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest
+    # - heroku create iris-cicd # the heroku app is already created
+    # push to Heroku
+    - docker push registry.heroku.com/$HEROKU_APP_NAME/web;
+    # alternative:
+    # - heroku container:push web --app iris-cicd
+    - heroku container:release web --app $HEROKU_APP_NAME
+    # alternative:
+    # - heroku container:release web --app iris-cicd
+  on:
+    branch: master

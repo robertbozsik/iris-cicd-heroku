@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Classifier</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="../static/style.css">
+  </head>
+  
+  <body>
+    <div class="main-block">
+      <div class="left-part">
+        <h3 id="title">Machine Learning Model Deployment</h3>
+        
+        <p>The goal of this project was to create an end-to-end data product by deploying a simple machine learning model. I used Flask to create the web application, Docker to containerize it, Travis CI to automate the deployment in case of any changes, and for the second deployment Heroku instead of AWS ECS to store the app.</p>
+        
+        <img src="../static/logos/flask.png" alt="flask logo">
+        <img src="../static/logos/docker.png" alt="docker logo">
+        <img src="../static/logos/travis.png" alt="travis logo">
+        <img src="../static/logos/heroku.png" alt="heroku logo">
+
+        <p>The model was trained based on the classical Iris dataset created by R. A. Fischer, included in scikit-learn within the dataset module. Go and try it out by adding the length and width parameters, after that hit the submit button in order to figure out what species your iris belongs to.</p>
+        <br>
+        <p>For more information about my projects and me please visit my <a href="https://github.com/robertbozsik" target="_blank">GitHub</a> and <a href="https://www.linkedin.com/in/robert-bozsik/" target="_blank">LinkedIn</a> profiles.</p>
+      </div>
+
+      <!-- with POST method data will be sent back to the server side -->
+      <form action="/" method = "POST">
+        <h1>Iris classifier ML model inputs:</h1>
+        <div class="info">
+          <input class="fname" type="text" name="sepal_length" placeholder="Add sepal length (in cm)">
+          <input class="fname" type="text" name="sepal_width" placeholder="Add sepal width (in cm)">
+          <input class="fname" type="text" name="petal_length" placeholder="Add petal length (in cm)">
+          <input class="fname" type="text" name="petal_width" placeholder="Add petal width (in cm)">
+        <button type="submit" href="/">Submit</button>
+      </form>
+
+    {% if output %}
+      <br>
+      <br>
+      <h2> Your iris species: {{ output }}</h2>
+    {% endif %}
+    </div>
+  </body>
+</html>
