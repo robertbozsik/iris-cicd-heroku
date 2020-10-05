@@ -28,6 +28,7 @@ deploy:
   script:
     - docker push robertbozsik/iris-cicd-heroku:latest;
     - docker push registry.heroku.com/iris-cicd/web;
+    - heroku container:push web --app iris-cicd;
     - heroku container:release web --app iris-cicd
   on:
     branch: main
