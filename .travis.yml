@@ -19,8 +19,8 @@ before_script:
   # https://devcenter.heroku.com/articles/container-registry-and-runtime
   # logging in to the Heroku registry:
   #   - docker login --username=$HEROKU_USERNAME --password=$HEROKU_API_KEY registry.heroku.com
-  - echo $HEROKU_CREDENTIALS_EMAIL
-  - echo $HEROKU_CREDENTIALS_PASSWORD | heroku login
+#   - echo $HEROKU_CREDENTIALS_EMAIL
+#   - echo $HEROKU_CREDENTIALS_PASSWORD | heroku login
 
 script:
   - docker build -t iris-cicd-heroku:latest .
@@ -28,6 +28,9 @@ script:
   - docker tag iris-cicd-heroku robertbozsik/iris-cicd-heroku:latest
 
 deploy:
+  provider: heroku
+    api_key: $HEROKU_API_KEY
+    app: iris-cicd
   provider: script
   skip-cleanup: true
   script:
@@ -38,9 +41,9 @@ deploy:
     # push to Heroku
     # - docker push registry.heroku.com/$HEROKU_APP_NAME/web;
     # alternative:
-    - heroku container:push web --app iris-cicd;
+    # - heroku container:push web --app iris-cicd;
     # - heroku container:release web --app $HEROKU_APP_NAME
     # alternative:
-    - heroku container:release web --app iris-cicd
+    # - heroku container:release web --app iris-cicd
   on:
     branch: main
