@@ -38,4 +38,4 @@ deploy:
     # alternative:
     # - heroku container:release web --app iris-cicd
   on:
-    branch: master
+    branch: main
