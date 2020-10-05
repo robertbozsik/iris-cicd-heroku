@@ -21,11 +21,12 @@ before_script:
   - docker login --username=$HEROKU_USERNAME --password=$HEROKU_API_KEY registry.heroku.com
 
 script:
-  - docker build -t $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest .
+  - docker build -t iris-cicd-heroku:latest .
   - docker tag $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest registry.heroku.com/$HEROKU_APP_NAME/web
 
 deploy:
   provider: script
+  skip-cleanup: true
   script:
     # push to Docker Hub
     - docker push $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest
@@ -33,7 +34,7 @@ deploy:
     # push to Heroku
     # - docker push registry.heroku.com/$HEROKU_APP_NAME/web;
     # alternative:
-    - heroku container:push web --app iris-cicd
+    - heroku container:push web --app iris-cicd;
     # - heroku container:release web --app $HEROKU_APP_NAME
     # alternative:
     - heroku container:release web --app iris-cicd
