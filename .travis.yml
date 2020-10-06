@@ -15,20 +15,20 @@ before_script:
   - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin # docker login OK
   - curl https://cli-assets.heroku.com/install.sh | sh # heroku CLI install OK
   # https://devcenter.heroku.com/articles/container-registry-and-runtime
-  # - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
   - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com # heroku container registry login OK
+  # - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
 
 script:
   - docker build -t robertbozsik/iris-cicd-heroku:latest . # building the image with docker OK
   - docker tag robertbozsik/iris-cicd-heroku:latest registry.heroku.com/iris-cicd/web # tag the image OK
   - docker push robertbozsik/iris-cicd-heroku:latest # push the image to docker OK
 
-# https://docs.travis-ci.com/user/deployment/heroku/
-# https://docs.travis-ci.com/user/deployment/#uploading-files-and-skip_cleanup
 deploy:
-  provider: heroku
-  api_key: $HEROKU_API_KEY
-  app: iris-cicd
+  provider: script
   skip_cleanup: true
+  script:
+    # - docker push registry.heroku.com/iris-cicd/web # push the image to heroku NOK
+    - heroku container:push web --app iris-cicd # build an image and push -> only work in iTerm
+    - heroku container:release web --app iris-cicd # release the image using the CLI -> only work only in iTerm
   on:
     branch: main
