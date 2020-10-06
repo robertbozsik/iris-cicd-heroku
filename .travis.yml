@@ -24,10 +24,11 @@ script:
   - docker push robertbozsik/iris-cicd-heroku:latest # push the image to docker OK
 
 # https://docs.travis-ci.com/user/deployment/heroku/
+# https://docs.travis-ci.com/user/deployment/#uploading-files-and-skip_cleanup
 deploy:
   provider: heroku
-  api_key:
-    secure: $HEROKU_API_KEY
-    app: iris-cicd
+  api_key: $HEROKU_API_KEY
+  app: iris-cicd
+  skip_cleanup: true
   on:
     branch: main
