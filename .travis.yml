@@ -29,6 +29,8 @@ deploy:
   script:
     # - docker push registry.heroku.com/iris-cicd/web # push the image to heroku NOK
     - heroku container:push web --app iris-cicd # build an image and push -> only work in iTerm
-    - heroku container:release web --app iris-cicd # release the image using the CLI -> only work only in iTerm
   on:
     branch: main
+
+after_deploy:
+  - heroku container:release web --app iris-cicd # release the image using the CLI -> only work only in iTerm
